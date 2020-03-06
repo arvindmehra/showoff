@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row mb-4 mt-4">
+    <div class="col">
+      <h1><%= @user["name"] %></h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-0 col-lg-6 col-xl-6">
+      <%=image_tag  @user["images"]["medium_url"], class: "card-img-top", alt: "user image" %>
+    </div>
+
+    <div class="col-md-0 col-lg-6 col-xl-6">
+
+              <div class="row">
+                 <div class="container">
+                      <% @user_widgets.each do |widget| %>
+                        <div class="input-container">
+                          <%= widget["name"]  %>
+                          <%= widget["description"] %>
+                        </div>
+                      <% end %>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
+              <%#= f.text_field :bid_amount, class: "form-control", placeholder: :bid, required: true %>
+            </div>
+          </div>
+
+  </div>
+
+</div>
