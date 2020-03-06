@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+  <%=link_to root_path, class: "navbar-brand" do %>
+    <h1>Showoff</h1>
+  <% end %>
+  <div class="collapse navbar-collapse mr-auto" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <% if user_signed_in? %>
+        <li class="nav-item">
+          <%= link_to "Log Out", logout_users_path, method: "delete", :class=>"nav-link" %>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to "Login", "#signup", class: "nav-link","data-toggle"=> "modal", "data-target"=> ".bs-modal-sm" %></li>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</nav>
+<% flash.each do |k, v| %>
+  <div id="<%= k %>" class="alert alert-<%=k %> mt-3 mb-3 mr-3 ml-3"><%= v %></div>
+<% end %>

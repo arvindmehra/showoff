@@ -1,0 +1,124 @@
+<div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <br>
+          <div class="bs-example bs-example-tabs">
+              <ul id="myTab" class="nav nav-tabs">
+                <li class="active" style="padding: 3px;"><a href="#signin" data-toggle="tab">Sign In</a></li>
+                <li class="" style="padding: 3px;"><a href="#signup" data-toggle="tab">Register</a></li>
+                <li class="" style="padding: 3px;"><a href="#reset" data-toggle="tab">Forgot Password?</a></li>
+              </ul>
+          </div>
+        <div class="modal-body">
+          <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade in" id="reset">
+           <div class="tab-pane fade active in show" id="signin">
+              <%= form_tag '/users/reset_password',  class: "form-horizontal" do %>
+              <fieldset>
+              <!-- Sign In Form -->
+              <!-- Text input-->
+              <div class="control-group">
+                <label class="control-label" for="userid">Email:</label>
+                <div class="controls">
+                  <%= text_field_tag :email, nil, placeholder: "JoeSixpack@sixpacksrus.com", class: "form-control" %>
+                </div>
+              </div>
+
+              <!-- Button -->
+              <div class="control-group">
+                <label class="control-label" for="signin"></label>
+                <div class="controls">
+                  <%= submit_tag 'Reset', type: "submit", class: "btn btn-success", id: "reset" %>
+                </div>
+              </div>
+              </fieldset>
+             <% end %>
+          </div>
+          </div>
+          <div class="tab-pane fade active in show" id="signin">
+              <%= form_tag '/users/sign_in',  class: "form-horizontal" do %>
+              <fieldset>
+              <!-- Sign In Form -->
+              <!-- Text input-->
+              <div class="control-group">
+                <label class="control-label" for="userid">Email:</label>
+                <div class="controls">
+                  <%= text_field_tag :email, nil, placeholder: "JoeSixpack@sixpacksrus.com", class: "form-control" %>
+                </div>
+              </div>
+
+              <!-- Password input-->
+              <div class="control-group">
+                <label class="control-label" for="passwordinput">Password:</label>
+                <div class="controls">
+                  <%= password_field_tag :password, nil, placeholder: "********", class: "form-control" %>
+                </div>
+              </div>
+
+              <!-- Button -->
+              <div class="control-group">
+                <label class="control-label" for="signin"></label>
+                <div class="controls">
+                  <%= submit_tag 'Sign in', type: "submit", class: "btn btn-success", id: "signin" %>
+                </div>
+              </div>
+              </fieldset>
+             <% end %>
+          </div>
+          <div class="tab-pane fade" id="signup">
+              <%= form_tag '/users/register',  class: "form-horizontal" do %>
+                <fieldset>
+                <!-- Sign Up Form -->
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="Email">Email:</label>
+                  <div class="controls">
+                    <%= text_field_tag :email, nil, placeholder: "JoeSixpack@sixpacksrus.com", class: "form-control" %>
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="userid">First Name:</label>
+                  <div class="controls">
+                    <%= text_field_tag :first_name, nil, placeholder: "First name", class: "form-control" %>
+                  </div>
+                </div>
+
+              <!-- Text input-->
+              <div class="control-group">
+                <label class="control-label" for="reenterpassword">Last Name:</label>
+                <div class="controls">
+                  <%= text_field_tag :last_name, nil, placeholder: "Last name", class: "form-control" %>
+                </div>
+              </div>
+
+              <!-- Password input-->
+                <div class="control-group">
+                  <label class="control-label" for="password">Password:</label>
+                  <div class="controls">
+                    <%= password_field_tag :password, nil, placeholder: "********", class: "form-control" %>
+                    <em>1-6 Characters recommended</em>
+                  </div>
+                </div>
+
+              <!-- Button -->
+              <div class="control-group">
+                <label class="control-label" for="confirmsignup"></label>
+                <div class="controls">
+                  <%= submit_tag 'Sign up', type: "submit", class: "btn btn-success", id: "confirmsignup" %>
+                </div>
+              </div>
+              </fieldset>
+            <% end %>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+      <center>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </center>
+      </div>
+    </div>
+  </div>
+</div>
