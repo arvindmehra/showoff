@@ -1,6 +1,7 @@
 require 'rest-client'
 class UsersController < ApplicationController
   def show
+    @user_id = params[:id]
     if user_signed_in?
       response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"})
       user_json = JSON.parse response.body
@@ -33,10 +34,10 @@ class UsersController < ApplicationController
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
-        session[:user_id] = token
+        session[:user_token] = token
       end
     end
-    if session[:user_id].present?
+    if session[:user_token].present?
       flash[:success] = "Yay! Your account has been created!!"
     else
       flash[:danger] = "Oops your account could not created!!"
@@ -66,10 +67,11 @@ class UsersController < ApplicationController
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
-        session[:user_id] = token
+        session[:user_token] = token
+        set_user
       end
     end
-    if session[:user_id].present?
+    if session[:user_token].present?
       flash[:success] = "Yay! You have succesfully logged in!"
     else
       flash[:danger] = "Oops can't login please check your credentials again!!"
@@ -95,6 +97,17 @@ class UsersController < ApplicationController
     end
     redirect_to root_path
   end
+
+  private
+    def set_user
+      response = RestClient.get("#{API_URL}/#{API_PATH}/users/me", {:Authorization => "Bearer #{current_user_token}"})
+      if response.present? && response.code == 200
+        user_json = JSON.parse response.body
+        user_data = user_json["data"]["user"]
+        session[:user_id] = user_data["id"]
+        session[:user_name] = user_data["name"]
+      end
+    end
 
 end
 

@@ -14,9 +14,6 @@
       <%=link_to root_path, class: "navbar-brand" do %>
          <h1>Showoff</h1>
       <% end %>
-      <% flash.each do |k, v| %>
-        <div id="<%= k %>" class="alert alert-<%=k %> mt-3 mb-3 mr-3 ml-3"><%= v %></div>
-      <% end %>
 
       <div class="collapse navbar-collapse mr-auto" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
@@ -33,6 +30,9 @@
       </div>
 
     </nav>
+      <% flash.each do |k, v| %>
+        <div id="<%= k %>" class="alert alert-<%=k %> mt-3 mb-3 mr-3 ml-3"><%= v %></div>
+      <% end %>
 
   <div class="modal fade bs-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
