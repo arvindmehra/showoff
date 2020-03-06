@@ -30,10 +30,13 @@ class UsersController < ApplicationController
       response = RestClient.post(url, payload) rescue nil
 
       if response.present? && response.code == 200
+        Rails.logger.info "[User Created]"
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
         session[:user_token] = token
+        Rails.logger.info token
+        Rails.logger.info session[:user_token]
       end
     end
     if session[:user_token].present?
@@ -53,6 +56,7 @@ class UsersController < ApplicationController
   end
 
   def sign_in
+    Rails.logger.info "In Sign in"
     password = params[:password]
     email = params[:email]
    if password.present? && email.present?
@@ -60,12 +64,16 @@ class UsersController < ApplicationController
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,:password=>password,
                                         :username=>email, :grant_type=>"password" }
       response = RestClient.post(url, payload) rescue nil
-
+      Rails.logger.info CLIENT_ID
+      Rails.logger.info response.code
       if response.present? && response.code == 200
+         Rails.logger.info "[User Logged in]"
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
         session[:user_token] = token
+        Rails.logger.info token
+        Rails.logger.info session[:user_token]
         set_user
       end
     end
