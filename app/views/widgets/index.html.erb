@@ -26,29 +26,30 @@
 </div>
 
 
-
-<div class="container">
-  <div class=row>
-    <div class="col mb-3">
-      <h3>Your Widgets</h3>
+<% if @user_widgets.present? %>
+  <div class="container">
+    <div class=row>
+      <div class="col mb-3">
+        <h3>Your Widgets</h3>
+      </div>
     </div>
-  </div>
-  <% @user_widgets.each_slice(4) do |widgets_collections| %>
-    <div class="row">
-      <% widgets_collections.each do |widget| %>
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-3 mb-4">
-          <%= link_to user_path(widget["user"]["id"]), {:style=>'color:#FFFFFF;'} do %>
-            <div class="card h-100">
-              <img class="card-img-top img-fluid" src="<%= widget["user"]["images"]["medium_url"] %>" alt="Card image cap" />
-              <div class="card-body">
-                <h6 style="color: black;" class="card-title no-decoration"><%= widget["name"].truncate(30) %></h5>
-                <h6 class="card-subtitle mb-2 text-muted">Lowest ask</h6>
-                <h6 class="card-subtitle mb-2 text-muted"><%= widget["description"] %></h6>
+    <% @user_widgets.each_slice(4) do |widgets_collections| %>
+      <div class="row">
+        <% widgets_collections.each do |widget| %>
+          <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-3 mb-4">
+            <%= link_to user_path(widget["user"]["id"]), {:style=>'color:#FFFFFF;'} do %>
+              <div class="card h-100">
+                <img class="card-img-top img-fluid" src="<%= widget["user"]["images"]["medium_url"] %>" alt="Card image cap" />
+                <div class="card-body">
+                  <h6 style="color: black;" class="card-title no-decoration"><%= widget["name"].truncate(30) %></h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Lowest ask</h6>
+                  <h6 class="card-subtitle mb-2 text-muted"><%= widget["description"] %></h6>
+                </div>
               </div>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

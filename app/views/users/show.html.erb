@@ -14,12 +14,19 @@
 
               <div class="row">
                  <div class="container">
-                      <% @user_widgets.each do |widget| %>
-                        <div class="input-container">
-                          <%= widget["name"]  %>
-                          <%= widget["description"] %>
-                        </div>
+                  <ul class="list-group">
+                    <li class="list-group-item active">
+                      Widgets
+                        <%= link_to "Create New", new_widget_path, class: "float-right text-dark" %>
+                    </li>
+                    <% @user_widgets.each do |widget| %>
+                      <li class="list-group-item">
+                        <%= widget["name"]  %> <%= widget["description"] %>
+                          <%=link_to "Destroy", widget_path(widget["id"]), method: :delete, class: "float-right text-dark ml-1"%>
+                          <%=link_to "Edit", edit_widget_path(widget: widget), class: "float-right text-dark ml-1"%>
+                        </li>
                       <% end %>
+                      </ul>
                   </div>
               </div>
             </div>
