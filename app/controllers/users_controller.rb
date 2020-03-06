@@ -3,11 +3,11 @@ class UsersController < ApplicationController
   def show
     @user_id = params[:id].to_i
     if user_signed_in?
-      response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"})
+      response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"}) rescue nil
       user_json = JSON.parse response.body
       @user = user_json["data"]["user"]
       response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}/widgets",
-      {params: {client_id: CLIENT_ID, client_secret: CLIENT_SECRET},:Authorization => "Bearer #{current_user_token}"})
+      {params: {client_id: CLIENT_ID, client_secret: CLIENT_SECRET},:Authorization => "Bearer #{current_user_token}"}) rescue nil
       user_widgets = JSON.parse response.body
       @user_widgets = user_widgets["data"]["widgets"]
     else
@@ -26,8 +26,7 @@ class UsersController < ApplicationController
       url = "#{API_URL}/users"
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,
                                         :user=>{:first_name=>first_name, :last_name=>last_name, :password=>password,
-                                        :email=>email, :image_url=>"https://static.thenounproject.com/png/961-200.png"}}
-      response = nil
+                                        :email=>email, :image_url=>"https://static.thenounproject.com/png/961-200.png"}} rescue nil
       response = RestClient.post(url, payload) rescue nil
 
       if response.present? && response.code == 200
@@ -60,7 +59,6 @@ class UsersController < ApplicationController
       url = "#{API_URL}/oauth/token"
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,:password=>password,
                                         :username=>email, :grant_type=>"password" }
-      response = nil
       response = RestClient.post(url, payload) rescue nil
 
       if response.present? && response.code == 200
@@ -84,7 +82,6 @@ class UsersController < ApplicationController
     if email.present?
       url = "#{API_URL}/#{API_PATH}/users/reset_password"
       payload = {:user=>{:email=>email},client_id: CLIENT_ID, client_secret: CLIENT_SECRET}
-      response = nil
       response = RestClient.post(url, payload) rescue nil
       if response.present? && response.code == 200
         user_json = JSON.parse response.body
@@ -100,7 +97,7 @@ class UsersController < ApplicationController
 
   private
     def set_user
-      response = RestClient.get("#{API_URL}/#{API_PATH}/users/me", {:Authorization => "Bearer #{current_user_token}"})
+      response = RestClient.get("#{API_URL}/#{API_PATH}/users/me", {:Authorization => "Bearer #{current_user_token}"}) rescue nil
       if response.present? && response.code == 200
         user_json = JSON.parse response.body
         user_data = user_json["data"]["user"]
