@@ -2,10 +2,10 @@ require 'rest-client'
 class UsersController < ApplicationController
   def show
     if user_signed_in?
-      response = RestClient.get("#{API_URL}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"})
+      response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"})
       user_json = JSON.parse response.body
       @user = user_json["data"]["user"]
-      response = RestClient.get("#{API_URL}/users/#{params[:id]}/widgets",
+      response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}/widgets",
       {params: {client_id: CLIENT_ID, client_secret: CLIENT_SECRET},:Authorization => "Bearer #{current_user_token}"})
       user_widgets = JSON.parse response.body
       @user_widgets = user_widgets["data"]["widgets"]
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   end
 
   def logout
-    response = RestClient.post("https://showoff-rails-react-production.herokuapp.com/oauth/revoke",
+    response = RestClient.post("#{API_URL}/oauth/revoke",
       {token: current_user_token}, {:Authorization => "Bearer #{current_user_token}"})
     session.clear
     flash[:success] = "You have been successfully logged out"
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     password = params[:password]
     email = params[:email]
    if password.present? && email.present?
-      url = "https://showoff-rails-react-production.herokuapp.com/oauth/token"
+      url = "#{API_URL}/oauth/token"
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,:password=>password,
                                         :username=>email, :grant_type=>"password" }
       response = nil
@@ -80,7 +80,7 @@ class UsersController < ApplicationController
   def reset_password
     email = params[:email]
     if email.present?
-      url = "https://showoff-rails-react-production.herokuapp.com/api/v1/users/reset_password"
+      url = "#{API_URL}/#{API_PATH}/users/reset_password"
       payload = {:user=>{:email=>email},client_id: CLIENT_ID, client_secret: CLIENT_SECRET}
       response = nil
       response = RestClient.post(url, payload) rescue nil

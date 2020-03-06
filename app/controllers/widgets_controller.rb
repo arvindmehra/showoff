@@ -3,13 +3,13 @@ require 'rest-client'
 class WidgetsController < ApplicationController
   before_action :user_signed_in?, except: [:index]
   def index
-    response = RestClient.get("#{API_URL}/widgets/visible",
+    response = RestClient.get("#{API_URL}/#{API_PATH}/widgets/visible",
     {params:  {client_id: CLIENT_ID, client_secret: CLIENT_SECRET}, term: 'a'})
     widgets_json = JSON.parse response.body
     @widgets = widgets_json["data"]["widgets"]
     if user_signed_in?
       puts current_user_token
-      response = RestClient.get("#{API_URL}/widgets/", {:Authorization => "Bearer #{current_user_token}"})
+      response = RestClient.get("#{API_URL}/#{API_PATH}/widgets/", {:Authorization => "Bearer #{current_user_token}"})
       widgets_json = JSON.parse response.body
       @user_widgets = widgets_json["data"]["widgets"]
     end
@@ -28,7 +28,7 @@ class WidgetsController < ApplicationController
     widget_name = widget_params[:name]
     description = widget_params[:description]
     if id.present? && widget_name.present? && description.present?
-      response = RestClient.put("https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/#{id}",
+      response = RestClient.put("#{API_URL}/#{API_PATH}/widgets/#{id}",
                   {:widget=>{name: widget_name, description: description}}, {:Authorization => "Bearer #{current_user_token}"}) rescue nil
       if response.present? && response.code == 200
         widget_json = JSON.parse response.body
@@ -52,7 +52,7 @@ class WidgetsController < ApplicationController
 
   def create
     if widget_params[:name].present? && widget_params[:description].present? && widget_params[:kind].present?
-       response = RestClient.post("https://showoff-rails-react-production.herokuapp.com/api/v1/widgets",
+       response = RestClient.post("#{API_URL}/#{API_PATH}/widgets",
                   {:widget=>{name: widget_params[:name], description: widget_params[:description], kind: widget_params[:kind]}}, {:Authorization => "Bearer #{current_user_token}"}) rescue nil
       if response.present? && response.code == 200
         widget_json = JSON.parse response.body
@@ -77,7 +77,7 @@ class WidgetsController < ApplicationController
   def destroy
     widget = params[:id]
     if widget.present?
-      response = RestClient.delete("https://showoff-rails-react-production.herokuapp.com/api/v1/widgets/#{widget}",
+      response = RestClient.delete("#{API_URL}/#{API_PATH}/widgets/#{widget}",
                   {:Authorization => "Bearer #{current_user_token}"}) rescue nil
       if response.present? && response.code == 200
         flash[:success] = "Congratulations Your widget have been deleted!!"
