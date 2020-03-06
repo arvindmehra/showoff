@@ -1,7 +1,7 @@
 require 'rest-client'
 class UsersController < ApplicationController
   def show
-    @user_id = params[:id]
+    @user_id = params[:id].to_i
     if user_signed_in?
       response = RestClient.get("#{API_URL}/#{API_PATH}/users/#{params[:id]}",{:Authorization => "Bearer #{current_user_token}"})
       user_json = JSON.parse response.body

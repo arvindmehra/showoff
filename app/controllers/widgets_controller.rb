@@ -35,18 +35,18 @@ class WidgetsController < ApplicationController
         @new_widget = widget_json["data"]["widget"]
         if widget_json["code"] != 0
           flash[:warning] = widget_json["message"]
-          render :new
+          redirect_to new_widget_path
         else
           flash[:success] = "Congratulations Your new widget have been Updated!!"
           redirect_to user_path(@new_widget["user"]["id"])
         end
       else
         flash[:warning] = "Please check your informations, this widget might already be updated"
-        render :new
+        redirect_to new_widget_path
       end
     else
       flash[:warning] = "Please fill all informations"
-      render :new
+      redirect_to new_widget_path
     end
   end
 
@@ -59,18 +59,18 @@ class WidgetsController < ApplicationController
         @new_widget = widget_json["data"]["widget"]
         if widget_json["code"] != 0
           flash[:warning] = widget_json["message"]
-          render :new
+          redirect_to new_widget_path
         else
           flash[:success] = "Congratulations Your new widget have been created!!"
           redirect_to user_path(@new_widget["user"]["id"])
         end
       else
-        flash[:warning] = "Please check your informations, this widget might already be created"
-        render :new
+        flash[:warning] = "Please check your informations, this widget might already be present"
+        redirect_to new_widget_path
       end
     else
       flash[:warning] = "Please fill all informations"
-      render :new
+      redirect_to new_widget_path
     end
   end
 
