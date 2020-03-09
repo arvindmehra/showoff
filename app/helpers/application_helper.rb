@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def user_signed_in?
-    session[:user_token].present?
+    valid_session? && session[:user_token].present?
   end
 
   def current_user_token
@@ -14,6 +14,10 @@ module ApplicationHelper
 
   def current_user_name
     session[:user_name]
+  end
+
+  def valid_session?
+    session[:expires_at] && session[:expires_at] > Time.now
   end
 
 end

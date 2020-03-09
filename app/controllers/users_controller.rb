@@ -17,26 +17,25 @@ class UsersController < ApplicationController
   end
 
   def register
-    session.clear
+    reset_session
     first_name= params[:first_name]
     last_name = params[:last_name]
     password = params[:password]
     email = params[:email]
     if first_name.present? && last_name.present? && password.present? && email.present?
-      url = "#{API_URL}/users"
+      url = "#{API_URL}/#{API_PATH}/users"
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,
                                         :user=>{:first_name=>first_name, :last_name=>last_name, :password=>password,
                                         :email=>email, :image_url=>"https://static.thenounproject.com/png/961-200.png"}} rescue nil
       response = RestClient.post(url, payload) rescue nil
 
       if response.present? && response.code == 200
-        Rails.logger.info "[User Created]"
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
         session[:user_token] = token
-        Rails.logger.info token
-        Rails.logger.info session[:user_token]
+        set_user(user_data["user"])
+        set_expiration
       end
     end
     if session[:user_token].present?
@@ -50,13 +49,12 @@ class UsersController < ApplicationController
   def logout
     response = RestClient.post("#{API_URL}/oauth/revoke",
       {token: current_user_token}, {:Authorization => "Bearer #{current_user_token}"})
-    session.clear
+    reset_session
     flash[:success] = "You have been successfully logged out"
     redirect_to root_path
   end
 
   def sign_in
-    Rails.logger.info "In Sign in"
     password = params[:password]
     email = params[:email]
    if password.present? && email.present?
@@ -64,17 +62,13 @@ class UsersController < ApplicationController
       payload = {client_id: CLIENT_ID, client_secret: CLIENT_SECRET,:password=>password,
                                         :username=>email, :grant_type=>"password" }
       response = RestClient.post(url, payload) rescue nil
-      Rails.logger.info CLIENT_ID
-      Rails.logger.info response.code
       if response.present? && response.code == 200
-         Rails.logger.info "[User Logged in]"
         user_json = JSON.parse response.body
         user_data = user_json["data"]
         token = user_data["token"]["access_token"]
         session[:user_token] = token
-        Rails.logger.info token
-        Rails.logger.info session[:user_token]
         set_user
+        set_expiration
       end
     end
     if session[:user_token].present?
@@ -104,14 +98,23 @@ class UsersController < ApplicationController
   end
 
   private
-    def set_user
-      response = RestClient.get("#{API_URL}/#{API_PATH}/users/me", {:Authorization => "Bearer #{current_user_token}"}) rescue nil
-      if response.present? && response.code == 200
-        user_json = JSON.parse response.body
-        user_data = user_json["data"]["user"]
-        session[:user_id] = user_data["id"]
-        session[:user_name] = user_data["name"]
+    def set_user(user_hash={})
+      if user_hash.present?
+        session[:user_id] = user_hash["id"]
+        session[:user_name] = user_hash["name"]
+      else
+        response = RestClient.get("#{API_URL}/#{API_PATH}/users/me", {:Authorization => "Bearer #{current_user_token}"}) rescue nil
+        if response.present? && response.code == 200
+          user_json = JSON.parse response.body
+          user_data = user_json["data"]["user"]
+          session[:user_id] = user_data["id"]
+          session[:user_name] = user_data["name"]
+        end
       end
+    end
+
+    def set_expiration
+      session[:expires_at] = Time.now + 30.minutes
     end
 
 end
