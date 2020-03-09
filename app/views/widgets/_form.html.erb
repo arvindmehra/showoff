@@ -11,7 +11,7 @@
   </div>
   <div class="form-group">
     <label for="Kind">Kind</label>
-    <%= w.text_field :kind, placeholder: "Hidden/Visible", class: "form-control" %>
+    <%= w.select :kind, [["Visible","visible"],["Hidden","hidden"]], class: "form-control" %>
   </div>
 
   <div class="form-actions">

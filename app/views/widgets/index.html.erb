@@ -51,5 +51,12 @@
           <% end %>
         </div>
       <% end %>
+  <% else %>
+  <div class=row>
+      <div class="col mb-3">
+        <%= link_to "Create Your First Widget", new_widget_path, class: " text-dark btn btn-primary" %>
+      </div>
+    </div>
+
   <% end %>
 </div>
